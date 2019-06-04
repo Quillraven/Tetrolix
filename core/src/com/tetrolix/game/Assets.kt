@@ -8,24 +8,32 @@ import ktx.assets.getAsset
 import ktx.assets.load
 
 enum class TextureAssets(val filePath: String) {
-    Block("graphics/block.png");
+    Block("graphics/block.png")
 }
 
 fun AssetManager.load(asset: TextureAssets) = load<Texture>(asset.filePath)
 operator fun AssetManager.get(asset: TextureAssets) = getAsset<Texture>(asset.filePath)
 
 enum class MusicAssets(val filePath: String) {
-    Game("music/game_bgd.mp3");
+    Game("music/game.ogg"),
+    GameFinale("music/game_finale.ogg"),
+    Highscore("music/highscore.ogg"),
+    Menu("music/menu.ogg")
 }
 
 fun AssetManager.load(asset: MusicAssets) = load<Music>(asset.filePath)
 operator fun AssetManager.get(asset: MusicAssets) = getAsset<Music>(asset.filePath)
 
 enum class SoundAssets(val filePath: String) {
-    RotateLeft("sounds/rotate_left.wav"),
-    RotateRight("sounds/rotate_right.wav"),
+    RotateLeft("sounds/block_rotate_left.wav"),
+    RotateRight("sounds/block_rotate_right.wav"),
     LineComplete("sounds/line_complete.wav"),
-    BlockLock("sounds/block_lock.wav");
+    BlockLock("sounds/block_lock.wav"),
+    BlockMove("sounds/block_move.wav"),
+    ButtonSelect("sounds/btn_select.wav"),
+    GameOver("sounds/game_over.wav"),
+    Highscore("sounds/highscore.wav"),
+    NextLevel("sounds/next_level.wav")
 }
 
 fun AssetManager.load(asset: SoundAssets) = load<Sound>(asset.filePath)

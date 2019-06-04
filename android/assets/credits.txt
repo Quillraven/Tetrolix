@@ -1,1 +1,2 @@
-rotatation and line completion sound effects by ViRiX
+SupspaceAudio for sound effects
+Patrick de Arteaga for music
