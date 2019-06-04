@@ -14,11 +14,13 @@ import com.tetrolix.game.get
 import com.tetrolix.game.model.Block
 import com.tetrolix.game.model.ColorTheme
 import com.tetrolix.game.model.Grid
+import ktx.app.KtxGame
 import ktx.app.KtxScreen
 import ktx.graphics.use
 import ktx.inject.Context
 
 class GameScreen(context: Context) : KtxScreen {
+    private val game = context.inject<KtxGame<KtxScreen>>()
     private val batch = context.inject<Batch>()
     private val assets = context.inject<AssetManager>()
     private val viewport = context.inject<Viewport>()
@@ -39,6 +41,8 @@ class GameScreen(context: Context) : KtxScreen {
     private var accumulator = 0f
     private var tickThreshold = 1f // 1 = once per second; 0.5 = twice per second; 0.1 = ten times per second
     private var highscore = 0
+    private var lockTimer = 0f
+    private val maxLockTimer = 0.5f
 
     override fun show() {
         currentMusic.run {
@@ -79,7 +83,9 @@ class GameScreen(context: Context) : KtxScreen {
             }
             Gdx.input.isKeyJustPressed(Input.Keys.DOWN) -> {
                 currentBlock.moveToBottom(grid)
-                resetAccumulator()
+                if (lockTimer == 0f) {
+                    lockTimer = maxLockTimer
+                }
             }
             Gdx.input.isKeyJustPressed(Input.Keys.R) -> {
                 currentBlock.rotate(grid, true)
@@ -94,11 +100,25 @@ class GameScreen(context: Context) : KtxScreen {
             Gdx.input.isKeyJustPressed(Input.Keys.NUM_1) -> currentColorTheme = currentColorTheme.next()
         }
 
-        accumulator += delta
-        while (accumulator >= tickThreshold) {
-            // update game logic every X seconds
-            accumulator -= tickThreshold
-            tick()
+        if (lockTimer == 0f) {
+            // no block locking at the moment -> check if block needs to be moved down
+            accumulator += delta
+            while (accumulator >= tickThreshold) {
+                // force block to move down every X seconds
+                accumulator -= tickThreshold
+                if (!currentBlock.moveDown(grid)) {
+                    // block cannot move anymore -> start block locking
+                    lockTimer = maxLockTimer
+                    break
+                }
+            }
+        } else {
+            // block cannot move anymore -> give the player a little time before block gets locked and a new one spawns
+            lockTimer -= delta
+            if (lockTimer <= 0) {
+                lockTimer = 0f
+                lockBlock()
+            }
         }
 
         // render game
@@ -131,49 +151,40 @@ class GameScreen(context: Context) : KtxScreen {
         }
     }
 
-    /**
-     * Certain time ([tickThreshold]) passed and the game logic is triggered.
-     * * Move the block down one row
-     * * If that is not possible then lock the block and spawn the next one
-     * * If spawning is not valid then the game is over
-     * * If rows are completed then they get removed and the [highscore] and [currentLevel] are adjusted if needed
-     */
-    private fun tick() {
-        numResets = 0
-        if (!currentBlock.moveDown(grid)) {
-            // block cannot move -> lock it and check for cleared rows
-            val numClearedRows = grid.removeFullRows(currentBlock)
-            if (numClearedRows > 0) {
-                // rows cleared -> update highscore and level
-                clearedRows += numClearedRows
-                highscore += getPointsForClear(numClearedRows)
-                assets[SoundAssets.LineComplete].play()
+    private fun lockBlock() {
+        // check for cleared rows
+        val numClearedRows = grid.removeFullRows(currentBlock)
+        if (numClearedRows > 0) {
+            // rows cleared -> update highscore and level
+            clearedRows += numClearedRows
+            highscore += getPointsForClear(numClearedRows)
+            assets[SoundAssets.LineComplete].play()
 
-                if (clearedRows >= rowsForNextLevel) {
-                    currentColorTheme = currentColorTheme.next()
-                    tickThreshold *= 0.75f
-                    assets[SoundAssets.NextLevel].play()
+            if (clearedRows >= rowsForNextLevel) {
+                currentColorTheme = currentColorTheme.next()
+                tickThreshold *= 0.75f
+                assets[SoundAssets.NextLevel].play()
 
-                    if (currentLevel == 9) {
-                        // change to more epic music for finale ;)
-                        currentMusic.stop()
-                        currentMusic = assets[MusicAssets.GameFinale]
-                        currentMusic.run {
-                            isLooping = true
-                            play()
-                        }
+                if (currentLevel == 9) {
+                    // change to more epic music for finale ;)
+                    currentMusic.stop()
+                    currentMusic = assets[MusicAssets.GameFinale]
+                    currentMusic.run {
+                        isLooping = true
+                        play()
                     }
                 }
-            } else {
-                // no rows cleared
-                assets[SoundAssets.BlockLock].play()
             }
+        } else {
+            // no rows cleared
+            assets[SoundAssets.BlockLock].play()
+        }
 
-            if (!currentBlock.spawn(grid)) {
-                // grid is full and block cannot be spawned -> game over
-                println("Game is lost!")
-                assets[SoundAssets.GameOver].play()
-            }
+        numResets = 0
+        if (!currentBlock.spawn(grid)) {
+            // grid is full and block cannot be spawned -> game over
+            assets[SoundAssets.GameOver].play()
+            game.setScreen<HighscoreScreen>()
         }
     }
 }
