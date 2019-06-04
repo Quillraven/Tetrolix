@@ -158,7 +158,7 @@ class Block {
  */
 enum class BlockType(internal val patterns: Array<Array<IntArray>>) {
     // Empty block for empty grid cells
-    Empty(arrayOf(arrayOf(intArrayOf(0)))),
+    Empty(arrayOf(arrayOf(intArrayOf(1)))),
     // I
     I(arrayOf( // 4 rotation types
             arrayOf(intArrayOf(0, 0, 0, 0), intArrayOf(1, 1, 1, 1), intArrayOf(0, 0, 0, 0), intArrayOf(0, 0, 0, 0)), // 0
