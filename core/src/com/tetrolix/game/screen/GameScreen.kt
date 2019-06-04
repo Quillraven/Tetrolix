@@ -167,7 +167,11 @@ class GameScreen(context: Context) : KtxScreen {
             if (clearedRows >= rowsForNextLevel) {
                 clearedRows = 0
                 ++currentLevel
-                currentColorTheme = currentColorTheme.next()
+                if (currentLevel >= 15) {
+                    currentColorTheme = ColorTheme.Transparent
+                } else {
+                    currentColorTheme = currentColorTheme.next()
+                }
                 tickThreshold *= 0.75f
                 assets[SoundAssets.NextLevel].play()
 
