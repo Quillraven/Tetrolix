@@ -26,12 +26,12 @@ enum class ColorTheme(internal val colorMap: Map<BlockType, Color>) {
     Theme2(mapOf(
             Pair(BlockType.Empty, Color.GRAY),
             Pair(BlockType.I, Color.MAROON),
-            Pair(BlockType.J, Color.FOREST),
+            Pair(BlockType.J, Color.GREEN),
             Pair(BlockType.L, Color.ROYAL),
             Pair(BlockType.O, Color.SALMON),
             Pair(BlockType.S, Color.SCARLET),
-            Pair(BlockType.T, Color.SLATE),
-            Pair(BlockType.Z, Color.TEAL)
+            Pair(BlockType.T, Color.WHITE),
+            Pair(BlockType.Z, Color.CYAN)
     )),
     Theme3(mapOf(
             Pair(BlockType.Empty, Color.GRAY),
@@ -65,12 +65,12 @@ enum class ColorTheme(internal val colorMap: Map<BlockType, Color>) {
     )),
     Theme6(mapOf(
             Pair(BlockType.Empty, Color.GRAY),
-            Pair(BlockType.I, Color.TEAL),
-            Pair(BlockType.J, Color.SLATE),
+            Pair(BlockType.I, Color.CYAN),
+            Pair(BlockType.J, Color.WHITE),
             Pair(BlockType.L, Color.SCARLET),
             Pair(BlockType.O, Color.SALMON),
             Pair(BlockType.S, Color.ROYAL),
-            Pair(BlockType.T, Color.FOREST),
+            Pair(BlockType.T, Color.GREEN),
             Pair(BlockType.Z, Color.MAROON)
     )),
     Theme7(mapOf(
