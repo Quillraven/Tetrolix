@@ -117,7 +117,11 @@ class GameScreen(context: Context) : KtxScreen {
             lockTimer -= delta
             if (lockTimer <= 0) {
                 lockTimer = 0f
-                lockBlock()
+                // check if the block could be moved down again (e.g. block was moved right/left and can fall again)
+                if (!currentBlock.moveDown(grid)) {
+                    // if it really cannot move anymore -> lock it
+                    lockBlock()
+                }
             }
         }
 
@@ -161,11 +165,13 @@ class GameScreen(context: Context) : KtxScreen {
             assets[SoundAssets.LineComplete].play()
 
             if (clearedRows >= rowsForNextLevel) {
+                clearedRows = 0
+                ++currentLevel
                 currentColorTheme = currentColorTheme.next()
                 tickThreshold *= 0.75f
                 assets[SoundAssets.NextLevel].play()
 
-                if (currentLevel == 9) {
+                if (currentLevel == 7) {
                     // change to more epic music for finale ;)
                     currentMusic.stop()
                     currentMusic = assets[MusicAssets.GameFinale]
