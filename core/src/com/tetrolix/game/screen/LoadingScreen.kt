@@ -1,5 +1,6 @@
 package com.tetrolix.game.screen
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.tetrolix.game.MusicAssets
@@ -9,6 +10,8 @@ import com.tetrolix.game.load
 import ktx.app.KtxGame
 import ktx.app.KtxScreen
 import ktx.inject.Context
+import ktx.scene2d.label
+import ktx.scene2d.table
 
 class LoadingScreen(private val context: Context) : KtxScreen {
     private val game = context.inject<KtxGame<KtxScreen>>()
@@ -19,6 +22,12 @@ class LoadingScreen(private val context: Context) : KtxScreen {
         TextureAssets.values().forEach { assets.load(it) }
         MusicAssets.values().forEach { assets.load(it) }
         SoundAssets.values().forEach { assets.load(it) }
+
+        stage.addActor(table {
+            label("Loading...", "huge") { cell -> cell.fill().row() }
+            label("Starting soon...", "default") { cell -> cell.fill().row() }
+            setFillParent(true)
+        })
     }
 
     override fun resize(width: Int, height: Int) {
@@ -26,7 +35,7 @@ class LoadingScreen(private val context: Context) : KtxScreen {
     }
 
     override fun render(delta: Float) {
-        if (assets.update()) {
+        if (assets.update() && Gdx.input.isTouched) {
             game.removeScreen<LoadingScreen>()
             this.dispose()
 

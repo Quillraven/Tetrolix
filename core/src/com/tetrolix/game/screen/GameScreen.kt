@@ -45,10 +45,13 @@ class GameScreen(context: Context) : KtxScreen {
     private val maxLockTimer = 0.5f
 
     override fun show() {
+        stage.clear()
+
         currentMusic.run {
             isLooping = true
             play()
         }
+
         currentBlock.spawn(grid)
     }
 
@@ -167,11 +170,7 @@ class GameScreen(context: Context) : KtxScreen {
             if (clearedRows >= rowsForNextLevel) {
                 clearedRows = 0
                 ++currentLevel
-                if (currentLevel >= 15) {
-                    currentColorTheme = ColorTheme.Transparent
-                } else {
-                    currentColorTheme = currentColorTheme.next()
-                }
+                currentColorTheme = if (currentLevel >= 15) ColorTheme.Transparent else currentColorTheme.next()
                 tickThreshold *= 0.75f
                 assets[SoundAssets.NextLevel].play()
 

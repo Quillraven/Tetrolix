@@ -1,0 +1,10 @@
+{
+  "LabelStyle": {
+    "default": {
+      "font": "font_default"
+    },
+    "huge": {
+      "font": "font_huge"
+    }
+  }
+}
