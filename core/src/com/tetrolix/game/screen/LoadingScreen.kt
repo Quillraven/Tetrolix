@@ -31,7 +31,10 @@ class LoadingScreen(private val context: Context) : KtxScreen {
             this.dispose()
 
             game.addScreen(GameScreen(context))
-            game.setScreen<GameScreen>()
+            game.addScreen(HighscoreScreen(context))
+            game.addScreen(MenuScreen(context))
+
+            game.setScreen<MenuScreen>()
         }
 
         stage.act(delta)
