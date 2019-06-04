@@ -13,10 +13,9 @@ import ktx.app.LetterboxingViewport
 import ktx.inject.Context
 
 /*TODO
-    1) create 9 color themes and update level according to highscore (level*clearedRows)
-    2) create highscore screen after game over
-    3) create menu screen
-    4) create UI (show highscore, show next block, flash rows that get removed, randomly fill grid when lost)
+    1) create highscore screen after game over
+    2) create menu screen
+    3) create UI (show highscore, show next block, flash rows that get removed, randomly fill grid when lost)
  */
 class Tetrolix : KtxGame<KtxScreen>() {
     private val context = Context()

@@ -3,7 +3,7 @@ package com.tetrolix.game.model
 import com.badlogic.gdx.graphics.Color
 
 enum class ColorTheme(internal val colorMap: Map<BlockType, Color>) {
-    Level0(mapOf(
+    Theme0(mapOf(
             Pair(BlockType.Empty, Color.GRAY),
             Pair(BlockType.I, Color.CYAN),
             Pair(BlockType.J, Color.BLUE),
@@ -13,7 +13,7 @@ enum class ColorTheme(internal val colorMap: Map<BlockType, Color>) {
             Pair(BlockType.T, Color.PURPLE),
             Pair(BlockType.Z, Color.RED)
     )),
-    Level1(mapOf(
+    Theme1(mapOf(
             Pair(BlockType.Empty, Color.GRAY),
             Pair(BlockType.I, Color.WHITE),
             Pair(BlockType.J, Color.CHARTREUSE),
@@ -22,5 +22,67 @@ enum class ColorTheme(internal val colorMap: Map<BlockType, Color>) {
             Pair(BlockType.S, Color.FIREBRICK),
             Pair(BlockType.T, Color.GOLDENROD),
             Pair(BlockType.Z, Color.MAGENTA)
-    ))
+    )),
+    Theme2(mapOf(
+            Pair(BlockType.Empty, Color.GRAY),
+            Pair(BlockType.I, Color.MAROON),
+            Pair(BlockType.J, Color.FOREST),
+            Pair(BlockType.L, Color.ROYAL),
+            Pair(BlockType.O, Color.SALMON),
+            Pair(BlockType.S, Color.SCARLET),
+            Pair(BlockType.T, Color.SLATE),
+            Pair(BlockType.Z, Color.TEAL)
+    )),
+    Theme3(mapOf(
+            Pair(BlockType.Empty, Color.GRAY),
+            Pair(BlockType.I, Color.VIOLET),
+            Pair(BlockType.J, Color.OLIVE),
+            Pair(BlockType.L, Color.NAVY),
+            Pair(BlockType.O, Color.LIME),
+            Pair(BlockType.S, Color.CYAN),
+            Pair(BlockType.T, Color.ORANGE),
+            Pair(BlockType.Z, Color.RED)
+    )),
+    Theme4(mapOf(
+            Pair(BlockType.Empty, Color.GRAY),
+            Pair(BlockType.I, Color.RED),
+            Pair(BlockType.J, Color.PURPLE),
+            Pair(BlockType.L, Color.GREEN),
+            Pair(BlockType.O, Color.YELLOW),
+            Pair(BlockType.S, Color.ORANGE),
+            Pair(BlockType.T, Color.BLUE),
+            Pair(BlockType.Z, Color.CYAN)
+    )),
+    Theme5(mapOf(
+            Pair(BlockType.Empty, Color.GRAY),
+            Pair(BlockType.I, Color.MAGENTA),
+            Pair(BlockType.J, Color.GOLDENROD),
+            Pair(BlockType.L, Color.FIREBRICK),
+            Pair(BlockType.O, Color.CORAL),
+            Pair(BlockType.S, Color.BROWN),
+            Pair(BlockType.T, Color.CHARTREUSE),
+            Pair(BlockType.Z, Color.WHITE)
+    )),
+    Theme6(mapOf(
+            Pair(BlockType.Empty, Color.GRAY),
+            Pair(BlockType.I, Color.TEAL),
+            Pair(BlockType.J, Color.SLATE),
+            Pair(BlockType.L, Color.SCARLET),
+            Pair(BlockType.O, Color.SALMON),
+            Pair(BlockType.S, Color.ROYAL),
+            Pair(BlockType.T, Color.FOREST),
+            Pair(BlockType.Z, Color.MAROON)
+    )),
+    Theme7(mapOf(
+            Pair(BlockType.Empty, Color.GRAY),
+            Pair(BlockType.I, Color.RED),
+            Pair(BlockType.J, Color.ORANGE),
+            Pair(BlockType.L, Color.CYAN),
+            Pair(BlockType.O, Color.LIME),
+            Pair(BlockType.S, Color.NAVY),
+            Pair(BlockType.T, Color.OLIVE),
+            Pair(BlockType.Z, Color.VIOLET)
+    ));
+
+    fun next(): ColorTheme = if (this.ordinal + 1 >= values().size) Theme0 else values()[this.ordinal + 1]
 }
