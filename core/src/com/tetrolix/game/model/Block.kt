@@ -46,9 +46,9 @@ class Block {
         currentPatternIdx = 0
         type = BlockType.random()
         x = (grid.columns() * 0.5f - columns() * 0.5f).toInt()
-        y = grid.rows() + height() - 1
+        y = grid.rows() + height() - 2
         // special case for I block because it has a height of 1 but due to the bounding box of 4x4 it would spawn already within the grid
-        if (y <= grid.rows()) y = grid.rows() + 1
+        if (y <= grid.rows()) y = grid.rows()
 
         y--
         return if (isOutsideOrBlocked(grid)) {
@@ -56,6 +56,7 @@ class Block {
             false
         } else {
             y++
+            grid.addBlock(this)
             true
         }
     }
