@@ -42,7 +42,7 @@ class GameScreen(context: Context) : KtxScreen {
     private var tickThreshold = 1f // 1 = once per second; 0.5 = twice per second; 0.1 = ten times per second
     private var highscore = 0
     private var lockTimer = 0f
-    private val maxLockTimer = 0.5f
+    private val maxLockTimer = 0.75f
 
     override fun show() {
         stage.clear()
