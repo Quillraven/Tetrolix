@@ -94,5 +94,8 @@ enum class ColorTheme(internal val colorMap: Map<BlockType, Color>) {
             Pair(BlockType.Z, Color.GRAY)
     ));
 
-    fun next(): ColorTheme = if (this.ordinal + 1 >= values().size) Theme0 else values()[this.ordinal + 1]
+    /**
+     * Loops through non-transparent themes
+     */
+    fun next(): ColorTheme = if (this.ordinal + 1 >= values().size - 1) Theme0 else values()[this.ordinal + 1]
 }
