@@ -2,33 +2,27 @@ package com.tetrolix.game
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.assets.AssetManager
-import com.badlogic.gdx.assets.loaders.SkinLoader
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.Batch
-import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
-import com.badlogic.gdx.utils.ObjectMap
 import com.badlogic.gdx.utils.viewport.FitViewport
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.tetrolix.game.screen.LoadingScreen
 import ktx.app.KtxGame
 import ktx.app.KtxScreen
 import ktx.app.LetterboxingViewport
-import ktx.assets.getValue
-import ktx.assets.loadOnDemand
 import ktx.freetype.generateFont
 import ktx.freetype.registerFreeTypeFontLoaders
 import ktx.inject.Context
 import ktx.scene2d.Scene2DSkin
+import ktx.style.*
 
 
-/*TODO
-    1) create highscore screen after game over
-    2) create menu screen
-    3) create UI (show highscore, show next block, flash rows that get removed, randomly fill grid when lost)
- */
+// TODO create UI (show highscore, show next block, flash rows that get removed, randomly fill grid when lost, select starting level, save highscore in preference and show it in menu)
 class Tetrolix : KtxGame<KtxScreen>() {
     private val context = Context()
 
@@ -36,9 +30,9 @@ class Tetrolix : KtxGame<KtxScreen>() {
         context.register {
             bindSingleton<Batch> { SpriteBatch() }
             bindSingleton { AssetManager().apply { registerFreeTypeFontLoaders() } }
-            bindSingleton(createSkin(context.inject()))
+            bindSingleton(createSkin())
             bindSingleton<Viewport> { FitViewport(10f, 20f) }
-            bindSingleton { Stage(LetterboxingViewport(aspectRatio = 16f / 9f), inject()) }
+            bindSingleton { Stage(LetterboxingViewport(aspectRatio = 9f / 16f), inject()) }
             bindSingleton<KtxGame<KtxScreen>> { this@Tetrolix }
         }
 
@@ -52,25 +46,46 @@ class Tetrolix : KtxGame<KtxScreen>() {
         super.create()
     }
 
-    private fun createSkin(assets: AssetManager): Skin {
-        // create fonts that are referenced in skin's json file
-        // and store them in a map to pass them as resource dependencies for the skin
-        val skinResources = ObjectMap<String, Any>()
-        val fontGenerator by assets.loadOnDemand<FreeTypeFontGenerator>("ui/8-bit.ttf")
-        skinResources.put("font_default", fontGenerator.generateFont { size = 32 })
-        skinResources.put("font_huge", fontGenerator.generateFont { size = 64 })
-        // unload the generator as it is no longer needed
-        assets.unload("ui/8-bit.ttf")
-        return assets.loadOnDemand<Skin>("ui/ui.json", SkinLoader.SkinParameter(skinResources)).asset
+    private fun createSkin(): Skin {
+        val fontGenerator = FreeTypeFontGenerator(Gdx.files.internal("ui/8-bit.ttf"))
+        val defaultFont = fontGenerator.generateFont { size = 32 }
+        val hugeFont = fontGenerator.generateFont { size = 64 }
+        fontGenerator.dispose()
+
+        return skin(TextureAtlas(Gdx.files.internal("ui/UI.atlas"))) {
+            // label styles
+            label {
+                font = defaultFont
+            }
+            label("huge") {
+                font = hugeFont
+            }
+            // button styles
+            textButton {
+                font = defaultFont
+                fontColor = Color.BLACK
+                downFontColor = Color.WHITE
+                up = it["btn"]
+                down = it["btn"]
+            }
+            // image button styles
+            imageButton("music") {
+                imageUp = it["btn_music_on"]
+                imageDown = it["btn_music_on"]
+                imageChecked = it["btn_music_off"]
+            }
+            imageButton("arrow") {
+                imageUp = it["btn_arrow"]
+                imageDown = it["btn_arrow"]
+            }
+            imageButton("rotate") {
+                imageUp = it["btn_rotate"]
+                imageDown = it["btn_rotate"]
+            }
+        }
     }
 
     override fun dispose() {
-        // remove bitmap fonts from skin because they are loaded via assetmanager and he will take
-        // care of the disposal. Otherwise they get disposed twice and we get an "Pixmap already disposed" exception
-        val skin = context.inject<Skin>()
-        for (fontKey in skin.getAll(BitmapFont::class.java).keys()) {
-            skin.remove(fontKey, BitmapFont::class.java)
-        }
         context.dispose()
         super.dispose()
     }

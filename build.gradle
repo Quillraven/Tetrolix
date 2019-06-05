@@ -83,6 +83,7 @@ project(":core") {
         api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
         api "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
         api "io.github.libktx:ktx-app:$ktxVersion"
+        api "io.github.libktx:ktx-actors:$ktxVersion"
         api "io.github.libktx:ktx-assets:$ktxVersion"
         api "io.github.libktx:ktx-collections:$ktxVersion"
         api "io.github.libktx:ktx-freetype:$ktxVersion"
@@ -92,5 +93,6 @@ project(":core") {
         api "io.github.libktx:ktx-log:$ktxVersion"
         api "io.github.libktx:ktx-math:$ktxVersion"
         api "io.github.libktx:ktx-scene2d:$ktxVersion"
+        api "io.github.libktx:ktx-style:$ktxVersion"
     }
 }
