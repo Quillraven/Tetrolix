@@ -1,0 +1,58 @@
+
+UI.png
+size: 512,512
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+btn
+  rotate: false
+  xy: 122, 328
+  size: 99, 99
+  split: 15, 18, 18, 19
+  orig: 99, 99
+  offset: 0, 0
+  index: -1
+btn_arrow
+  rotate: false
+  xy: 2, 105
+  size: 99, 99
+  orig: 99, 99
+  offset: 0, 0
+  index: -1
+btn_dark
+  rotate: false
+  xy: 328, 330
+  size: 97, 97
+  split: 17, 18, 18, 13
+  orig: 97, 97
+  offset: 0, 0
+  index: -1
+btn_gutter
+  rotate: false
+  xy: 2, 311
+  size: 116, 116
+  split: 4, 4, 5, 5
+  orig: 116, 116
+  offset: 0, 0
+  index: -1
+btn_music_off
+  rotate: false
+  xy: 225, 328
+  size: 99, 99
+  orig: 99, 99
+  offset: 0, 0
+  index: -1
+btn_music_on
+  rotate: false
+  xy: 2, 2
+  size: 99, 99
+  orig: 99, 99
+  offset: 0, 0
+  index: -1
+btn_rotate
+  rotate: false
+  xy: 2, 208
+  size: 99, 99
+  orig: 99, 99
+  offset: 0, 0
+  index: -1
