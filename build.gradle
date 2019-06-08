@@ -24,7 +24,7 @@ allprojects {
         appName = "Tetrolix"
         gdxVersion = '1.9.9'
         roboVMVersion = '2.3.6'
-        ktxVersion = '1.9.9-b1'
+        ktxVersion = '1.9.9-b2'
     }
 
     repositories {
