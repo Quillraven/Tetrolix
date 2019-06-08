@@ -3,13 +3,14 @@ package com.tetrolix.game.screen
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.scenes.scene2d.Stage
-import com.tetrolix.game.MusicAssets
-import com.tetrolix.game.get
+import com.badlogic.gdx.utils.Align
+import com.tetrolix.game.*
 import ktx.actors.onClick
 import ktx.app.KtxGame
 import ktx.app.KtxScreen
 import ktx.inject.Context
 import ktx.scene2d.imageButton
+import ktx.scene2d.label
 import ktx.scene2d.table
 import ktx.scene2d.textButton
 
@@ -20,13 +21,31 @@ class MenuScreen(context: Context) : KtxScreen {
 
     override fun show() {
         music.play()
-        stage.clear()
 
+        stage.clear()
         stage.addActor(table {
-            textButton("X") { cell -> cell.top().right().expand().row() }.onClick { Gdx.app.exit() }
-            textButton("Start Game") { cell -> cell.expand().row() }.onClick { game.setScreen<GameScreen>() }
-            textButton("Credits") { cell -> cell.expand().row() }
-            imageButton("music") { cell -> cell.expand().padBottom(100f).row() }
+            defaults().expand().uniform()
+
+            // close game
+            textButton("X") { cell -> cell.expand(false, false).top().right().row() }.onClick { Gdx.app.exit() }
+            // go to starting level selection
+            textButton("Start Game") { cell -> cell.width(200f).row() }.onClick { game.setScreen<GameScreen>() }
+            // show controls and gameplay information
+            textButton("Information") { cell -> cell.width(200f).row() }
+            // music options
+            table { tableCell ->
+                imageButton(Buttons.music())
+                textButton("-")
+                label("100", Labels.bright()) { cell -> cell.width(175f).fill() }.setAlignment(Align.center)
+                textButton("+")
+                tableCell.row()
+            }
+            // show credits for assets
+            textButton("Credits") { cell -> cell.width(200f).row() }
+            // copyright :P
+            label("by Quillraven 2019") { cell -> cell.expand(false, false).bottom().right().pad(0f, 0f, 10f, 10f) }
+
+            background = skin.getDrawable(Drawables.gutter_dark())
             setFillParent(true)
         })
     }

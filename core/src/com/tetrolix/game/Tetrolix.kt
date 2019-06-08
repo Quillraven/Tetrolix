@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.utils.viewport.FitViewport
 import com.badlogic.gdx.utils.viewport.Viewport
+import com.tetrolix.game.Drawables.*
 import com.tetrolix.game.screen.LoadingScreen
 import ktx.app.KtxGame
 import ktx.app.KtxScreen
@@ -57,30 +58,35 @@ class Tetrolix : KtxGame<KtxScreen>() {
             label {
                 font = defaultFont
             }
-            label("huge") {
+            label(Labels.huge()) {
                 font = hugeFont
+            }
+            label(Labels.bright()) {
+                font = defaultFont
+                fontColor = Color.BLACK
+                background = it[btn]
             }
             // button styles
             textButton {
                 font = defaultFont
                 fontColor = Color.BLACK
                 downFontColor = Color.WHITE
-                up = it["btn"]
-                down = it["btn"]
+                up = it[btn]
+                down = it[btn]
             }
             // image button styles
-            imageButton("music") {
-                imageUp = it["btn_music_on"]
-                imageDown = it["btn_music_on"]
-                imageChecked = it["btn_music_off"]
+            imageButton(Buttons.music()) {
+                imageUp = it[btn_music_on]
+                imageDown = it[btn_music_on]
+                imageChecked = it[btn_music_off]
             }
-            imageButton("arrow") {
-                imageUp = it["btn_arrow"]
-                imageDown = it["btn_arrow"]
+            imageButton(Buttons.arrow()) {
+                imageUp = it[btn_arrow]
+                imageDown = it[btn_arrow]
             }
-            imageButton("rotate") {
-                imageUp = it["btn_rotate"]
-                imageDown = it["btn_rotate"]
+            imageButton(Buttons.rotate()) {
+                imageUp = it[btn_rotate]
+                imageDown = it[btn_rotate]
             }
         }
     }

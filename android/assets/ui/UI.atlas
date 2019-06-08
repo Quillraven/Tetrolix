@@ -1,12 +1,12 @@
 
 UI.png
-size: 512,512
+size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 btn
   rotate: false
-  xy: 122, 328
+  xy: 514, 923
   size: 99, 99
   split: 15, 18, 18, 19
   orig: 99, 99
@@ -14,45 +14,51 @@ btn
   index: -1
 btn_arrow
   rotate: false
-  xy: 2, 105
+  xy: 617, 923
   size: 99, 99
   orig: 99, 99
   offset: 0, 0
   index: -1
 btn_dark
   rotate: false
-  xy: 328, 330
+  xy: 720, 925
   size: 97, 97
   split: 17, 18, 18, 13
   orig: 97, 97
   offset: 0, 0
   index: -1
-btn_gutter
-  rotate: false
-  xy: 2, 311
-  size: 116, 116
-  split: 4, 4, 5, 5
-  orig: 116, 116
-  offset: 0, 0
-  index: -1
 btn_music_off
   rotate: false
-  xy: 225, 328
+  xy: 514, 717
   size: 99, 99
   orig: 99, 99
   offset: 0, 0
   index: -1
 btn_music_on
   rotate: false
-  xy: 2, 2
+  xy: 617, 820
   size: 99, 99
   orig: 99, 99
   offset: 0, 0
   index: -1
 btn_rotate
   rotate: false
-  xy: 2, 208
+  xy: 514, 820
   size: 99, 99
   orig: 99, 99
+  offset: 0, 0
+  index: -1
+gutter
+  rotate: false
+  xy: 2, 2
+  size: 508, 508
+  orig: 508, 508
+  offset: 0, 0
+  index: -1
+gutter_dark
+  rotate: false
+  xy: 2, 514
+  size: 508, 508
+  orig: 508, 508
   offset: 0, 0
   index: -1

@@ -5,10 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.actions.Actions.*
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.utils.Align
-import com.tetrolix.game.MusicAssets
-import com.tetrolix.game.SoundAssets
-import com.tetrolix.game.TextureAssets
-import com.tetrolix.game.load
+import com.tetrolix.game.*
 import ktx.actors.onClick
 import ktx.actors.plus
 import ktx.actors.plusAssign
@@ -24,7 +21,7 @@ class LoadingScreen(private val context: Context) : KtxScreen {
     private val game = context.inject<KtxGame<KtxScreen>>()
     private val assets = context.inject<AssetManager>()
     private val stage = context.inject<Stage>()
-    private val label = Label("Loading...", Scene2DSkin.defaultSkin, "huge").apply {
+    private val label = Label("Loading...", Scene2DSkin.defaultSkin, Labels.huge()).apply {
         setAlignment(Align.center)
         setWrap(true)
     }
@@ -35,7 +32,9 @@ class LoadingScreen(private val context: Context) : KtxScreen {
         MusicAssets.values().forEach { assets.load(it) }
         SoundAssets.values().forEach { assets.load(it) }
 
+        stage.clear()
         stage.addActor(table {
+            // expand label to entire screen so that the user can click anywhere
             actor(label) { cell -> cell.expand().fill() }.onClick {
                 if (finishedLoading) {
                     game.removeScreen<LoadingScreen>()

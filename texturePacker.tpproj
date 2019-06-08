@@ -11,8 +11,8 @@ fast=false
 filterMag=Nearest
 filterMin=Nearest
 ignoreBlankImages=true
-maxHeight=512
-maxWidth=512
+maxHeight=1024
+maxWidth=1024
 minHeight=16
 minWidth=16
 paddingX=4
@@ -32,12 +32,12 @@ limitMemory=true
 useIndexes=true
 
 scaleFactors=[{suffix:"",factor:1,resampling:bicubic}]
-inputFiles=[{path:graphics,type:Input,dirFilePrefix:null,recursive:false,flattenPaths:false},{path:graphics/button.png,type:Ignore},{path:graphics/button_dark.png,type:Ignore},{path:graphics/gutter_bgd.png,type:Ignore}]
+inputFiles=[{path:graphics,type:Input,dirFilePrefix:null,recursive:false,flattenPaths:false},{path:graphics/button.png,type:Ignore},{path:graphics/button_dark.png,type:Ignore}]
 
 
 -PROJ-
 
-version=4.8.1
+version=4.8.2
 fileTypeType=png
 fileTypeData={encoding:RGBA8888}
 previewBackgroundColor=ffffffff

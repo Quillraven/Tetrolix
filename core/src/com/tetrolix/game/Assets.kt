@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture
 import ktx.assets.getAsset
 import ktx.assets.load
 
+// textures
 enum class TextureAssets(val filePath: String) {
     Block("graphics/block.png")
 }
@@ -14,6 +15,7 @@ enum class TextureAssets(val filePath: String) {
 fun AssetManager.load(asset: TextureAssets) = load<Texture>(asset.filePath)
 operator fun AssetManager.get(asset: TextureAssets) = getAsset<Texture>(asset.filePath)
 
+// music
 enum class MusicAssets(val filePath: String) {
     Game("music/game.ogg"),
     GameFinale("music/game_finale.ogg"),
@@ -24,6 +26,7 @@ enum class MusicAssets(val filePath: String) {
 fun AssetManager.load(asset: MusicAssets) = load<Music>(asset.filePath)
 operator fun AssetManager.get(asset: MusicAssets) = getAsset<Music>(asset.filePath)
 
+// sounds
 enum class SoundAssets(val filePath: String) {
     RotateLeft("sounds/block_rotate_left.wav"),
     RotateRight("sounds/block_rotate_right.wav"),
@@ -38,3 +41,22 @@ enum class SoundAssets(val filePath: String) {
 
 fun AssetManager.load(asset: SoundAssets) = load<Sound>(asset.filePath)
 operator fun AssetManager.get(asset: SoundAssets) = getAsset<Sound>(asset.filePath)
+
+// UI
+enum class Drawables {
+    btn, btn_music_on, btn_music_off, btn_arrow, btn_rotate, btn_dark, gutter, gutter_dark;
+
+    operator fun invoke() = toString()
+}
+
+enum class Buttons {
+    music, arrow, rotate;
+
+    operator fun invoke() = toString()
+}
+
+enum class Labels {
+    huge, bright;
+
+    operator fun invoke() = toString()
+}

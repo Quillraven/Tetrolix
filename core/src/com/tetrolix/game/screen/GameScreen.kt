@@ -136,7 +136,7 @@ class GameScreen(context: Context) : KtxScreen {
             for (row in 0 until grid.rows()) {
                 for (column in 0 until grid.columns()) {
                     batch.color = currentColorTheme.colorMap[grid[row, column].type]
-                    it.draw(blockTexture, column.toFloat(), row.toFloat(), 1f, 1f)
+                    it.draw(blockTexture, column.toFloat() * 0.75f, row.toFloat() * 0.75f, 0.75f, 0.75f)
                 }
             }
         }
