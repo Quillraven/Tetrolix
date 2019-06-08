@@ -44,19 +44,19 @@ operator fun AssetManager.get(asset: SoundAssets) = getAsset<Sound>(asset.filePa
 
 // UI
 enum class Drawables {
-    btn, btn_music_on, btn_music_off, btn_arrow, btn_rotate, btn_dark, gutter, gutter_dark;
+    Btn, BtnMusicOn, BtnMusicOff, BtnArrow, BtnRotateLeft, BtnRotateRight, BtnDark, Gutter, GutterDark, Banner;
 
     operator fun invoke() = toString()
 }
 
 enum class Buttons {
-    music, arrow, rotate;
+    Music, Arrow, RotateLeft, RotateRight, Dark, Banner;
 
     operator fun invoke() = toString()
 }
 
 enum class Labels {
-    huge, bright;
+    Huge, BrightBgd, Dark;
 
     operator fun invoke() = toString()
 }

@@ -21,7 +21,7 @@ class LoadingScreen(private val context: Context) : KtxScreen {
     private val game = context.inject<KtxGame<KtxScreen>>()
     private val assets = context.inject<AssetManager>()
     private val stage = context.inject<Stage>()
-    private val label = Label("Loading...", Scene2DSkin.defaultSkin, Labels.huge()).apply {
+    private val label = Label("Loading...", Scene2DSkin.defaultSkin, Labels.Huge()).apply {
         setAlignment(Align.center)
         setWrap(true)
     }
@@ -58,6 +58,7 @@ class LoadingScreen(private val context: Context) : KtxScreen {
     override fun render(delta: Float) {
         if (assets.update() && !finishedLoading) {
             finishedLoading = true
+            context.bindSingleton(AudioManager(context.inject()))
             label.txt = "Touch to continue"
             label += forever(alpha(0f) + fadeIn(1f) + delay(0.25f) + fadeOut(1f))
         }

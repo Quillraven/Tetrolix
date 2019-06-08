@@ -7,10 +7,7 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.viewport.Viewport
-import com.tetrolix.game.MusicAssets
-import com.tetrolix.game.SoundAssets
-import com.tetrolix.game.TextureAssets
-import com.tetrolix.game.get
+import com.tetrolix.game.*
 import com.tetrolix.game.model.Block
 import com.tetrolix.game.model.ColorTheme
 import com.tetrolix.game.model.Grid
@@ -23,6 +20,7 @@ class GameScreen(context: Context) : KtxScreen {
     private val game = context.inject<KtxGame<KtxScreen>>()
     private val batch = context.inject<Batch>()
     private val assets = context.inject<AssetManager>()
+    private val audioMgr = context.inject<AudioManager>()
     private val viewport = context.inject<Viewport>()
     private val stage = context.inject<Stage>()
 
@@ -31,7 +29,6 @@ class GameScreen(context: Context) : KtxScreen {
     private val grid = Grid(10, 20)
     private var currentBlock = Block()
     private var currentColorTheme = ColorTheme.Theme0
-    private var currentMusic = assets[MusicAssets.Game]
 
     private var numResets = 0
     private val maxResets = 20
@@ -46,17 +43,8 @@ class GameScreen(context: Context) : KtxScreen {
 
     override fun show() {
         stage.clear()
-
-        currentMusic.run {
-            isLooping = true
-            play()
-        }
-
+        audioMgr.play(MusicAssets.Game)
         currentBlock.spawn(grid)
-    }
-
-    override fun hide() {
-        currentMusic.stop()
     }
 
     override fun resize(width: Int, height: Int) {
@@ -76,12 +64,12 @@ class GameScreen(context: Context) : KtxScreen {
         when {
             Gdx.input.isKeyJustPressed(Input.Keys.LEFT) -> {
                 currentBlock.moveLeft(grid)
-                assets[SoundAssets.BlockMove].play()
+                audioMgr.play(SoundAssets.BlockMove)
                 resetAccumulator()
             }
             Gdx.input.isKeyJustPressed(Input.Keys.RIGHT) -> {
                 currentBlock.moveRight(grid)
-                assets[SoundAssets.BlockMove].play()
+                audioMgr.play(SoundAssets.BlockMove)
                 resetAccumulator()
             }
             Gdx.input.isKeyJustPressed(Input.Keys.DOWN) -> {
@@ -92,12 +80,12 @@ class GameScreen(context: Context) : KtxScreen {
             }
             Gdx.input.isKeyJustPressed(Input.Keys.R) -> {
                 currentBlock.rotate(grid, true)
-                assets[SoundAssets.RotateRight].play()
+                audioMgr.play(SoundAssets.RotateRight)
                 resetAccumulator()
             }
             Gdx.input.isKeyJustPressed(Input.Keys.L) -> {
                 currentBlock.rotate(grid, false)
-                assets[SoundAssets.RotateLeft].play()
+                audioMgr.play(SoundAssets.RotateLeft)
                 resetAccumulator()
             }
             Gdx.input.isKeyJustPressed(Input.Keys.NUM_1) -> currentColorTheme = currentColorTheme.next()
@@ -165,34 +153,29 @@ class GameScreen(context: Context) : KtxScreen {
             // rows cleared -> update highscore and level
             clearedRows += numClearedRows
             highscore += getPointsForClear(numClearedRows)
-            assets[SoundAssets.LineComplete].play()
+            audioMgr.play(SoundAssets.LineComplete)
 
             if (clearedRows >= rowsForNextLevel) {
                 clearedRows = 0
                 ++currentLevel
                 currentColorTheme = if (currentLevel >= 15) ColorTheme.Transparent else currentColorTheme.next()
                 tickThreshold *= 0.75f
-                assets[SoundAssets.NextLevel].play()
+                audioMgr.play(SoundAssets.NextLevel)
 
                 if (currentLevel == 7) {
-                    // change to more epic music for finale ;)
-                    currentMusic.stop()
-                    currentMusic = assets[MusicAssets.GameFinale]
-                    currentMusic.run {
-                        isLooping = true
-                        play()
-                    }
+                    // change to more epic Music for finale ;)
+                    audioMgr.play(MusicAssets.GameFinale)
                 }
             }
         } else {
             // no rows cleared
-            assets[SoundAssets.BlockLock].play()
+            audioMgr.play(SoundAssets.BlockLock)
         }
 
         numResets = 0
         if (!currentBlock.spawn(grid)) {
             // grid is full and block cannot be spawned -> game over
-            assets[SoundAssets.GameOver].play()
+            audioMgr.play(SoundAssets.GameOver)
             game.setScreen<HighscoreScreen>()
         }
     }

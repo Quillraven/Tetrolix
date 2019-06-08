@@ -15,7 +15,6 @@ import com.tetrolix.game.Drawables.*
 import com.tetrolix.game.screen.LoadingScreen
 import ktx.app.KtxGame
 import ktx.app.KtxScreen
-import ktx.app.LetterboxingViewport
 import ktx.freetype.generateFont
 import ktx.freetype.registerFreeTypeFontLoaders
 import ktx.inject.Context
@@ -23,18 +22,18 @@ import ktx.scene2d.Scene2DSkin
 import ktx.style.*
 
 
-// TODO create UI (show highscore, show next block, flash rows that get removed, randomly fill grid when lost, select starting level, save highscore in preference and show it in menu)
+// TODO create UI (show highscore, show next block, flash rows that get removed, randomly fill grid when lost, select starting level, save highscore and volume in preference and show it in menu)
 class Tetrolix : KtxGame<KtxScreen>() {
     private val context = Context()
 
     override fun create() {
         context.register {
-            bindSingleton<Batch> { SpriteBatch() }
-            bindSingleton { AssetManager().apply { registerFreeTypeFontLoaders() } }
+            bindSingleton<Batch>(SpriteBatch())
+            bindSingleton(AssetManager().apply { registerFreeTypeFontLoaders() })
             bindSingleton(createSkin())
-            bindSingleton<Viewport> { FitViewport(10f, 20f) }
-            bindSingleton { Stage(LetterboxingViewport(aspectRatio = 9f / 16f), inject()) }
-            bindSingleton<KtxGame<KtxScreen>> { this@Tetrolix }
+            bindSingleton<Viewport>(FitViewport(10f, 20f))
+            bindSingleton(Stage(FitViewport(576f, 1024f), inject()))
+            bindSingleton<KtxGame<KtxScreen>>(this@Tetrolix)
         }
 
         // set skin for UI and set stage as input processor for button events, etc.
@@ -58,35 +57,60 @@ class Tetrolix : KtxGame<KtxScreen>() {
             label {
                 font = defaultFont
             }
-            label(Labels.huge()) {
-                font = hugeFont
-            }
-            label(Labels.bright()) {
+            label(Labels.Dark()) {
                 font = defaultFont
                 fontColor = Color.BLACK
-                background = it[btn]
+            }
+            label(Labels.Huge()) {
+                font = hugeFont
+            }
+            label(Labels.BrightBgd()) {
+                font = defaultFont
+                fontColor = Color.BLACK
+                background = it[Btn]
             }
             // button styles
             textButton {
                 font = defaultFont
                 fontColor = Color.BLACK
                 downFontColor = Color.WHITE
-                up = it[btn]
-                down = it[btn]
+                up = it[Btn]
+                down = it[Btn]
+                disabled = it[BtnDark]
+            }
+            textButton(Buttons.Dark()) {
+                font = defaultFont
+                fontColor = Color.BLACK
+                downFontColor = Color.WHITE
+                up = it[BtnDark]
+                down = it[BtnDark]
             }
             // image button styles
-            imageButton(Buttons.music()) {
-                imageUp = it[btn_music_on]
-                imageDown = it[btn_music_on]
-                imageChecked = it[btn_music_off]
+            imageButton(Buttons.Banner()) {
+                imageUp = it[Banner]
+                imageDown = it[Banner]
             }
-            imageButton(Buttons.arrow()) {
-                imageUp = it[btn_arrow]
-                imageDown = it[btn_arrow]
+            imageButton(Buttons.Music()) {
+                imageUp = it[BtnMusicOn]
+                imageDown = it[BtnMusicOn]
+                imageChecked = it[BtnMusicOff]
             }
-            imageButton(Buttons.rotate()) {
-                imageUp = it[btn_rotate]
-                imageDown = it[btn_rotate]
+            imageButton(Buttons.Arrow()) {
+                imageUp = it[BtnArrow]
+                imageDown = it[BtnArrow]
+            }
+            imageButton(Buttons.RotateLeft()) {
+                imageUp = it[BtnRotateLeft]
+                imageDown = it[BtnRotateLeft]
+            }
+            imageButton(Buttons.RotateRight()) {
+                imageUp = it[BtnRotateRight]
+                imageDown = it[BtnRotateRight]
+            }
+            // window styles
+            window {
+                titleFont = hugeFont
+                background = it[Gutter]
             }
         }
     }

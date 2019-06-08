@@ -4,58 +4,72 @@ size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-btn
+Banner
   rotate: false
-  xy: 514, 923
+  xy: 514, 964
+  size: 492, 58
+  orig: 492, 58
+  offset: 0, 0
+  index: -1
+Btn
+  rotate: false
+  xy: 720, 861
   size: 99, 99
   split: 15, 18, 18, 19
   orig: 99, 99
   offset: 0, 0
   index: -1
-btn_arrow
+BtnArrow
   rotate: false
-  xy: 617, 923
+  xy: 617, 758
   size: 99, 99
   orig: 99, 99
   offset: 0, 0
   index: -1
-btn_dark
+BtnDark
   rotate: false
-  xy: 720, 925
+  xy: 514, 554
   size: 97, 97
   split: 17, 18, 18, 13
   orig: 97, 97
   offset: 0, 0
   index: -1
-btn_music_off
+BtnMusicOff
   rotate: false
-  xy: 514, 717
+  xy: 514, 655
   size: 99, 99
   orig: 99, 99
   offset: 0, 0
   index: -1
-btn_music_on
+BtnMusicOn
   rotate: false
-  xy: 617, 820
+  xy: 514, 861
   size: 99, 99
   orig: 99, 99
   offset: 0, 0
   index: -1
-btn_rotate
+BtnRotateLeft
   rotate: false
-  xy: 514, 820
+  xy: 514, 758
   size: 99, 99
   orig: 99, 99
   offset: 0, 0
   index: -1
-gutter
+BtnRotateRight
+  rotate: false
+  xy: 617, 861
+  size: 99, 99
+  orig: 99, 99
+  offset: 0, 0
+  index: -1
+Gutter
   rotate: false
   xy: 2, 2
   size: 508, 508
   orig: 508, 508
   offset: 0, 0
   index: -1
-gutter_dark
+GutterDark
   rotate: false
   xy: 2, 514
   size: 508, 508
