@@ -21,6 +21,7 @@ import ktx.inject.Context
 import ktx.scene2d.Scene2DSkin
 import ktx.style.*
 
+const val UI_BTN_SIZE = 75f
 
 // TODO create UI (show highscore, show next block, flash rows that get removed, randomly fill grid when lost, select starting level, save highscore and volume in preference and show it in menu)
 class Tetrolix : KtxGame<KtxScreen>() {
