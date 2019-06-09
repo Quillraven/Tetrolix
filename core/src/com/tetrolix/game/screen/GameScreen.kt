@@ -16,6 +16,10 @@ import ktx.app.KtxScreen
 import ktx.graphics.use
 import ktx.inject.Context
 
+private const val MAX_RESETS = 20
+private const val ROWS_FOR_NEXT_LEVEL = 10
+private const val MAX_LOCK_TIMER = 0.75f
+
 class GameScreen(context: Context) : KtxScreen {
     private val game = context.inject<KtxGame<KtxScreen>>()
     private val batch = context.inject<Batch>()
@@ -31,20 +35,58 @@ class GameScreen(context: Context) : KtxScreen {
     private var currentColorTheme = ColorTheme.Theme0
 
     private var numResets = 0
-    private val maxResets = 20
     private var clearedRows = 0
-    private val rowsForNextLevel = 10
-    private var currentLevel = 1
+
+    var currentLevel = 1
     private var accumulator = 0f
     private var tickThreshold = 1f // 1 = once per second; 0.5 = twice per second; 0.1 = ten times per second
     private var highscore = 0
     private var lockTimer = 0f
-    private val maxLockTimer = 0.75f
+
 
     override fun show() {
         stage.clear()
-        audioMgr.play(MusicAssets.Game)
+
+        // set music
+        if (currentLevel >= 7) {
+            // more epic Music for finale ;)
+            audioMgr.play(MusicAssets.GameFinale)
+        } else {
+            audioMgr.play(MusicAssets.Game)
+        }
+
+        // reset game state to initial values
+        // clear grid
+        grid.clear()
+        // set level: currentLevel is set from "SelectLevelScreen"
+        setLevel(currentLevel)
+        // reset game internal counters
+        numResets = 0
+        clearedRows = 0
+        accumulator = 0f
+        highscore = 0
+        lockTimer = 0f
+
+        // spawn first block
         currentBlock.spawn(grid)
+    }
+
+    private fun setLevel(newLevel: Int) {
+        currentLevel = newLevel
+        // set color theme
+        currentColorTheme = if (currentLevel >= 15) ColorTheme.Transparent else ColorTheme.Theme0
+        if (currentLevel < 15) {
+            for (i in 1 until currentLevel) {
+                currentColorTheme = currentColorTheme.next()
+            }
+        }
+        // set how fast blocks are falling
+        tickThreshold = 1f
+        for (i in 1 until currentLevel) {
+            tickThreshold *= 0.75f
+        }
+        // reset rows to clear
+        clearedRows = 0
     }
 
     override fun resize(width: Int, height: Int) {
@@ -54,7 +96,7 @@ class GameScreen(context: Context) : KtxScreen {
 
     private fun resetAccumulator() {
         ++numResets
-        if (numResets < maxResets) {
+        if (numResets < MAX_RESETS) {
             accumulator = 0f
         }
     }
@@ -75,7 +117,7 @@ class GameScreen(context: Context) : KtxScreen {
             Gdx.input.isKeyJustPressed(Input.Keys.DOWN) -> {
                 currentBlock.moveToBottom(grid)
                 if (lockTimer == 0f) {
-                    lockTimer = maxLockTimer
+                    lockTimer = MAX_LOCK_TIMER
                 }
             }
             Gdx.input.isKeyJustPressed(Input.Keys.R) -> {
@@ -88,7 +130,7 @@ class GameScreen(context: Context) : KtxScreen {
                 audioMgr.play(SoundAssets.RotateLeft)
                 resetAccumulator()
             }
-            Gdx.input.isKeyJustPressed(Input.Keys.NUM_1) -> currentColorTheme = currentColorTheme.next()
+            Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) -> game.setScreen<MenuScreen>()
         }
 
         if (lockTimer == 0f) {
@@ -99,7 +141,7 @@ class GameScreen(context: Context) : KtxScreen {
                 accumulator -= tickThreshold
                 if (!currentBlock.moveDown(grid)) {
                     // block cannot move anymore -> start block locking
-                    lockTimer = maxLockTimer
+                    lockTimer = MAX_LOCK_TIMER
                     break
                 }
             }
@@ -155,17 +197,9 @@ class GameScreen(context: Context) : KtxScreen {
             highscore += getPointsForClear(numClearedRows)
             audioMgr.play(SoundAssets.LineComplete)
 
-            if (clearedRows >= rowsForNextLevel) {
-                clearedRows = 0
-                ++currentLevel
-                currentColorTheme = if (currentLevel >= 15) ColorTheme.Transparent else currentColorTheme.next()
-                tickThreshold *= 0.75f
+            if (clearedRows >= ROWS_FOR_NEXT_LEVEL) {
+                setLevel(currentLevel + 1)
                 audioMgr.play(SoundAssets.NextLevel)
-
-                if (currentLevel == 7) {
-                    // change to more epic Music for finale ;)
-                    audioMgr.play(MusicAssets.GameFinale)
-                }
             }
         } else {
             // no rows cleared

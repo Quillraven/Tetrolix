@@ -43,6 +43,7 @@ class LoadingScreen(private val context: Context) : KtxScreen {
                     game.addScreen(GameScreen(context))
                     game.addScreen(HighscoreScreen(context))
                     game.addScreen(MenuScreen(context))
+                    game.addScreen(SelectLevelScreen(context))
 
                     game.setScreen<MenuScreen>()
                 }

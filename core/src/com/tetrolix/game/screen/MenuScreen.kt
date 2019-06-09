@@ -43,10 +43,10 @@ class MenuScreen(context: Context) : KtxScreen {
     private val informationWindow = window("") {
         label("Information", Labels.Huge()) { cell -> cell.colspan(3).padTop(20f).row() }.color = Color.BLACK
         // move block info
-        imageButton(Buttons.Arrow()) { cell -> cell.size(75f).padLeft(10f) }
-        imageButton(Buttons.Arrow()) { cell -> cell.size(75f) }.run {
+        imageButton(Buttons.Arrow()) { cell -> cell.size(UI_BTN_SIZE).padLeft(10f) }
+        imageButton(Buttons.Arrow()) { cell -> cell.size(UI_BTN_SIZE) }.run {
             isTransform = true
-            setOrigin(75 * 0.5f, 75 * 0.5f)
+            setOrigin(UI_BTN_SIZE * 0.5f, UI_BTN_SIZE * 0.5f)
             rotateBy(180f)
         }
         label("moves block right and left", Labels.Dark()) { cell -> cell.expand().fill().padLeft(10f).padRight(10f).row() }.run {
@@ -54,9 +54,9 @@ class MenuScreen(context: Context) : KtxScreen {
             setWrap(true)
         }
         // drop block info
-        imageButton(Buttons.Arrow()) { cell -> cell.size(75f).padLeft(10f) }.run {
+        imageButton(Buttons.Arrow()) { cell -> cell.size(UI_BTN_SIZE).padLeft(10f) }.run {
             isTransform = true
-            setOrigin(75 * 0.5f, 75 * 0.5f)
+            setOrigin(UI_BTN_SIZE * 0.5f, UI_BTN_SIZE * 0.5f)
             rotateBy(270f)
         }
         label("drops block to lowest possible position", Labels.Dark()) { cell -> cell.expand().fill().padLeft(10f).colspan(2).row() }.run {
@@ -64,8 +64,8 @@ class MenuScreen(context: Context) : KtxScreen {
             setWrap(true)
         }
         // rotate block info
-        imageButton(Buttons.RotateRight()) { cell -> cell.size(75f).padLeft(10f) }
-        imageButton(Buttons.RotateLeft()) { cell -> cell.size(75f) }
+        imageButton(Buttons.RotateRight()) { cell -> cell.size(UI_BTN_SIZE).padLeft(10f) }
+        imageButton(Buttons.RotateLeft()) { cell -> cell.size(UI_BTN_SIZE) }
         label("rotates block clockwise and counter clockwise", Labels.Dark()) { cell -> cell.expand().fill().padLeft(10f).row() }.run {
             setAlignment(Align.left)
             setWrap(true)
@@ -98,11 +98,11 @@ class MenuScreen(context: Context) : KtxScreen {
             defaults().expand().uniform()
 
             // close game
-            textButton("X") { cell -> cell.expand(false, false).top().right().size(75f).row() }.onClick { Gdx.app.exit() }
+            textButton("X") { cell -> cell.expand(false, false).top().right().size(UI_BTN_SIZE).row() }.onClick { Gdx.app.exit() }
             // banner
             imageButton(Buttons.Banner()) { cell -> cell.row() }
             // go to starting level selection
-            textButton("Start Game") { cell -> cell.width(200f).row() }.onClick { game.setScreen<GameScreen>() }
+            textButton("Start Game") { cell -> cell.width(200f).row() }.onClick { game.setScreen<SelectLevelScreen>() }
             // show controls and gameplay information
             textButton("Information") { cell -> cell.width(200f).row() }.onChange {
                 stage.addActor(informationWindow)
