@@ -76,4 +76,12 @@ class Grid(width: Int, height: Int) {
         }
         return numRowsCleared
     }
+
+    fun clear() {
+        for (row in 0 until rows()) {
+            for (col in 0 until columns()) {
+                this[row, col].type = BlockType.Empty
+            }
+        }
+    }
 }
