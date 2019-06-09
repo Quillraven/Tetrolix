@@ -11,8 +11,11 @@ class Block {
     private var y = 0
     private var type = BlockType.Empty
     private var currentPatternIdx = 0
+    private var next = BlockType.random()
 
     fun type() = type
+
+    fun next() = next
 
     /**
      * Returns the bounding box amount of rows for the block. E.g. block I has a bounding box of size 4x4
@@ -44,7 +47,8 @@ class Block {
 
     fun spawn(grid: Grid): Boolean {
         currentPatternIdx = 0
-        type = BlockType.random()
+        type = next
+        next = BlockType.random()
         x = (grid.columns() * 0.5f - columns() * 0.5f).toInt()
         y = grid.rows() + height() - 2
         // special case for I block because it has a height of 1 but due to the bounding box of 4x4 it would spawn already within the grid
