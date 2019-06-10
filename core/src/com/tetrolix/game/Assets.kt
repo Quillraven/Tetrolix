@@ -3,17 +3,8 @@ package com.tetrolix.game
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.audio.Music
 import com.badlogic.gdx.audio.Sound
-import com.badlogic.gdx.graphics.Texture
 import ktx.assets.getAsset
 import ktx.assets.load
-
-// textures
-enum class TextureAssets(val filePath: String) {
-    Block("graphics/block.png")
-}
-
-fun AssetManager.load(asset: TextureAssets) = load<Texture>(asset.filePath)
-operator fun AssetManager.get(asset: TextureAssets) = getAsset<Texture>(asset.filePath)
 
 // music
 enum class MusicAssets(val filePath: String) {
@@ -44,7 +35,12 @@ operator fun AssetManager.get(asset: SoundAssets) = getAsset<Sound>(asset.filePa
 
 // UI
 enum class Drawables {
-    Btn, BtnMusicOn, BtnMusicOff, BtnArrow, BtnRotateLeft, BtnRotateRight, BtnDark, Gutter, GutterDark, Banner;
+    Btn,
+    BtnMusicOn, BtnMusicOff,
+    BtnArrow, BtnArrowPressed,
+    BtnRotateLeft, BtnRotateLeftPressed,
+    BtnRotateRight, BtnRotateRightPressed,
+    BtnDark, Gutter, GutterDark, Banner, Block;
 
     operator fun invoke() = toString()
 }

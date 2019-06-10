@@ -98,15 +98,15 @@ class Tetrolix : KtxGame<KtxScreen>() {
             }
             imageButton(Buttons.Arrow()) {
                 imageUp = it[BtnArrow]
-                imageDown = it[BtnArrow]
+                imageDown = it[BtnArrowPressed]
             }
             imageButton(Buttons.RotateLeft()) {
                 imageUp = it[BtnRotateLeft]
-                imageDown = it[BtnRotateLeft]
+                imageDown = it[BtnRotateLeftPressed]
             }
             imageButton(Buttons.RotateRight()) {
                 imageUp = it[BtnRotateRight]
-                imageDown = it[BtnRotateRight]
+                imageDown = it[BtnRotateRightPressed]
             }
             // window styles
             window {

@@ -28,7 +28,6 @@ class LoadingScreen(private val context: Context) : KtxScreen {
     private var finishedLoading = false
 
     override fun show() {
-        TextureAssets.values().forEach { assets.load(it) }
         MusicAssets.values().forEach { assets.load(it) }
         SoundAssets.values().forEach { assets.load(it) }
 

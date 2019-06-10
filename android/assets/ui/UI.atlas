@@ -11,9 +11,16 @@ Banner
   orig: 492, 58
   offset: 0, 0
   index: -1
+Block
+  rotate: false
+  xy: 514, 516
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
 Btn
   rotate: false
-  xy: 720, 861
+  xy: 514, 552
   size: 99, 99
   split: 15, 18, 18, 19
   orig: 99, 99
@@ -21,14 +28,21 @@ Btn
   index: -1
 BtnArrow
   rotate: false
-  xy: 617, 758
+  xy: 720, 758
+  size: 99, 99
+  orig: 99, 99
+  offset: 0, 0
+  index: -1
+BtnArrowPressed
+  rotate: false
+  xy: 720, 861
   size: 99, 99
   orig: 99, 99
   offset: 0, 0
   index: -1
 BtnDark
   rotate: false
-  xy: 514, 554
+  xy: 823, 863
   size: 97, 97
   split: 17, 18, 18, 13
   orig: 97, 97
@@ -36,7 +50,7 @@ BtnDark
   index: -1
 BtnMusicOff
   rotate: false
-  xy: 514, 655
+  xy: 617, 758
   size: 99, 99
   orig: 99, 99
   offset: 0, 0
@@ -55,9 +69,23 @@ BtnRotateLeft
   orig: 99, 99
   offset: 0, 0
   index: -1
-BtnRotateRight
+BtnRotateLeftPressed
   rotate: false
   xy: 617, 861
+  size: 99, 99
+  orig: 99, 99
+  offset: 0, 0
+  index: -1
+BtnRotateRight
+  rotate: false
+  xy: 514, 655
+  size: 99, 99
+  orig: 99, 99
+  offset: 0, 0
+  index: -1
+BtnRotateRightPressed
+  rotate: false
+  xy: 617, 655
   size: 99, 99
   orig: 99, 99
   offset: 0, 0
