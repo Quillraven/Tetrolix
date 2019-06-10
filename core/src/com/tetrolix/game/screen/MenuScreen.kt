@@ -95,12 +95,14 @@ class MenuScreen(context: Context) : KtxScreen {
 
         stage.clear()
         stage.addActor(table {
-            defaults().expand().uniform()
+            defaults().expand()
 
             // close game
             textButton("X") { cell -> cell.expand(false, false).top().right().size(UI_BTN_SIZE).row() }.onClick { Gdx.app.exit() }
             // banner
             imageButton(Buttons.Banner()) { cell -> cell.row() }
+            // highscore
+            label("Highscore: 0", Labels.Huge()) { cell -> cell.expand(true, false).spaceBottom(75f).row() }
             // go to starting level selection
             textButton("Start Game") { cell -> cell.width(200f).row() }.onClick { game.setScreen<SelectLevelScreen>() }
             // show controls and gameplay information
@@ -110,7 +112,7 @@ class MenuScreen(context: Context) : KtxScreen {
             }
             // music options
             table { tableCell ->
-                imageButton(Buttons.Music()).onChangeEvent { changeEvent, actor ->
+                imageButton(Buttons.Music()).onChangeEvent { _, actor ->
                     btnVolDec.isDisabled = actor.isChecked
                     btnVolInc.isDisabled = actor.isChecked
                     btnVolDec.touchable = if (actor.isChecked) Touchable.disabled else Touchable.enabled
@@ -128,7 +130,7 @@ class MenuScreen(context: Context) : KtxScreen {
                 tableCell.row()
             }
             // show credits for assets
-            textButton("Credits") { cell -> cell.width(200f).row() }.onChange {
+            textButton("Credits") { cell -> cell.width(200f).spaceBottom(30f).row() }.onChange {
                 stage.addActor(creditsWindow)
                 creditsWindow.centerPosition()
             }
