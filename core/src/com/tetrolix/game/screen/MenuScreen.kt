@@ -1,6 +1,7 @@
 package com.tetrolix.game.screen
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Preferences
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.Touchable
@@ -18,6 +19,7 @@ class MenuScreen(context: Context) : KtxScreen {
     private val game = context.inject<KtxGame<KtxScreen>>()
     private val stage = context.inject<Stage>()
     private val audioMgr = context.inject<AudioManager>()
+    private val prefs = context.inject<Preferences>()
 
     private val volumeInfo = Label("${Math.round(audioMgr.volume * 100)}", Scene2DSkin.defaultSkin, Labels.BrightBgd()).apply { setAlignment(Align.center) }
     private val btnVolDec = TextButton("-", Scene2DSkin.defaultSkin)
@@ -102,7 +104,7 @@ class MenuScreen(context: Context) : KtxScreen {
             // banner
             imageButton(Buttons.Banner()) { cell -> cell.row() }
             // highscore
-            label("Highscore: 0", Labels.Huge()) { cell -> cell.expand(true, false).spaceBottom(75f).row() }
+            label("Highscore: ${prefs.getInteger(PREF_KEY_HIGHSCORE, 0)}", Labels.Huge()) { cell -> cell.expand(true, false).spaceBottom(75f).row() }
             // go to starting level selection
             textButton("Start Game") { cell -> cell.width(200f).row() }.onClick { game.setScreen<SelectLevelScreen>() }
             // show controls and gameplay information

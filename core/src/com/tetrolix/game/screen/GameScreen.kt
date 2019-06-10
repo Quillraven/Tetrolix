@@ -290,6 +290,7 @@ class GameScreen(context: Context) : KtxScreen {
         if (!currentBlock.spawn(grid)) {
             // grid is full and block cannot be spawned -> game over
             audioMgr.play(SoundAssets.GameOver)
+            game.getScreen<HighscoreScreen>().highscore = highscore
             game.setScreen<HighscoreScreen>()
         }
     }
