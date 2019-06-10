@@ -58,7 +58,7 @@ class LoadingScreen(private val context: Context) : KtxScreen {
     override fun render(delta: Float) {
         if (assets.update() && !finishedLoading) {
             finishedLoading = true
-            context.bindSingleton(AudioManager(context.inject()))
+            context.bindSingleton(AudioManager(context.inject(), context.inject()))
             label.txt = "Touch to continue"
             label += forever(alpha(0f) + fadeIn(1f) + delay(0.25f) + fadeOut(1f))
         }

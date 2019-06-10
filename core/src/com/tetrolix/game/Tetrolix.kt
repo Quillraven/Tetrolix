@@ -35,6 +35,7 @@ class Tetrolix : KtxGame<KtxScreen>() {
             bindSingleton<Viewport>(FitViewport(10f, 20f))
             bindSingleton(Stage(FitViewport(576f, 1024f), inject()))
             bindSingleton<KtxGame<KtxScreen>>(this@Tetrolix)
+            bindSingleton(Gdx.app.getPreferences("Tetrolix"))
         }
 
         // set skin for UI and set stage as input processor for button events, etc.
