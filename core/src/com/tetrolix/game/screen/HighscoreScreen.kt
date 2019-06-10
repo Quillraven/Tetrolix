@@ -5,6 +5,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import ktx.app.KtxGame
 import ktx.app.KtxScreen
 import ktx.inject.Context
+import ktx.scene2d.label
+import ktx.scene2d.table
 
 class HighscoreScreen(context: Context) : KtxScreen {
     private val game = context.inject<KtxGame<KtxScreen>>()
@@ -12,6 +14,15 @@ class HighscoreScreen(context: Context) : KtxScreen {
 
     override fun show() {
         stage.clear()
+
+        stage.addActor(table {
+            defaults().expand()
+
+            label("Highscore: 0") { cell -> cell.row() }
+            label("Highest Score: 0") { cell -> cell.row() }
+
+            setFillParent(true)
+        })
     }
 
     override fun resize(width: Int, height: Int) {
