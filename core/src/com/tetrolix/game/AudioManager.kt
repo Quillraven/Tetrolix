@@ -13,10 +13,7 @@ class AudioManager(private val assets: AssetManager) {
         }
 
 
-    fun play(soundType: SoundAssets) = assets[soundType].run {
-        val soundID = play()
-        setVolume(soundID, volume)
-    }
+    fun play(soundType: SoundAssets) = assets[soundType].play(volume)
 
     fun play(musicType: MusicAssets) = assets[musicType].run {
         currentMusic.stop()
