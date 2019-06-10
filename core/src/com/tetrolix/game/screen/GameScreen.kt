@@ -2,7 +2,6 @@ package com.tetrolix.game.screen
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
-import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.scenes.scene2d.Stage
@@ -23,18 +22,17 @@ import ktx.scene2d.*
 private const val MAX_RESETS = 20
 private const val ROWS_FOR_NEXT_LEVEL = 10
 private const val MAX_LOCK_TIMER = 0.75f
-private const val GAME_SCALE = 0.72f
+private const val GAME_SCALE = 0.70f
 private const val PREVIEW_BLOCK_SIZE = 24f
 
 class GameScreen(context: Context) : KtxScreen {
     private val game = context.inject<KtxGame<KtxScreen>>()
     private val batch = context.inject<Batch>()
-    private val assets = context.inject<AssetManager>()
     private val audioMgr = context.inject<AudioManager>()
     private val viewport = context.inject<Viewport>()
     private val stage = context.inject<Stage>()
 
-    private val blockTexture = assets[TextureAssets.Block]
+    private val blockTexture = Scene2DSkin.defaultSkin.atlas.findRegion(Drawables.Block())
 
     private val grid = Grid(10, 20)
     private var currentBlock = Block()
@@ -82,30 +80,31 @@ class GameScreen(context: Context) : KtxScreen {
             // highscore
             actor(highscoreLabel) { cell -> cell.expandX().width(300f).top().left().padTop(15f).padLeft(10f) }
             // level indicator
-            actor(levelLabel) { cell -> cell.expandX().width(255f).colspan(2).top().right().padRight(10f).padTop(15f).row() }
+            actor(levelLabel) { cell -> cell.expandX().width(255f).top().right().padRight(10f).padTop(15f).row() }
             // next block
-            label("Next block: ", Labels.BrightBgd()) { cell -> cell.expand().width(300f).top().left().padLeft(10f).padTop(5f).colspan(3).row() }
+            label("Next block: ", Labels.BrightBgd()) { cell -> cell.expand().width(300f).top().left().padLeft(10f).padTop(5f).colspan(2).row() }
 
             // rotate block buttons
             imageButton(Buttons.RotateLeft()) { cell -> cell.size(UI_BTN_SIZE).left().bottom().expand().padLeft(10f).padBottom(10f) }.onClick { rotate(false) }
             imageButton(Buttons.RotateRight()) { cell -> cell.size(UI_BTN_SIZE).right().bottom().expand().colspan(2).padRight(10f).padBottom(10f).row() }.onClick { rotate(true) }
 
             // move block left button
-            imageButton(Buttons.Arrow()) { cell -> cell.size(UI_BTN_SIZE).left().bottom().padLeft(10f).padBottom(10f) }.run {
+            imageButton(Buttons.Arrow()) { cell -> cell.size(UI_BTN_SIZE).left().bottom().padLeft(10f).padBottom(80f) }.run {
                 isTransform = true
                 setOrigin(UI_BTN_SIZE * 0.5f, UI_BTN_SIZE * 0.5f)
                 rotateBy(180f)
                 onClick { moveLeft() }
             }
+            // move block right button
+            imageButton(Buttons.Arrow()) { cell -> cell.size(UI_BTN_SIZE).right().bottom().padRight(10f).padBottom(80f).row() }.onClick { moveRight() }
+
             // drop block button
-            imageButton(Buttons.Arrow()) { cell -> cell.size(UI_BTN_SIZE).expandX().right().bottom().padRight(10f).padBottom(10f) }.run {
+            imageButton(Buttons.Arrow()) { cell -> cell.size(UI_BTN_SIZE).expandX().right().bottom().padRight(10f).padBottom(10f).colspan(2) }.run {
                 isTransform = true
                 setOrigin(UI_BTN_SIZE * 0.5f, UI_BTN_SIZE * 0.5f)
                 rotateBy(270f)
                 onClick { moveBottom() }
             }
-            // move block right button
-            imageButton(Buttons.Arrow()) { cell -> cell.size(UI_BTN_SIZE).right().bottom().padRight(10f).padBottom(10f).row() }.onClick { moveRight() }
 
             background = skin.getDrawable(Drawables.GutterDark())
             setFillParent(true)
@@ -226,12 +225,13 @@ class GameScreen(context: Context) : KtxScreen {
             for (row in 0 until grid.rows()) {
                 for (column in 0 until grid.columns()) {
                     batch.color = currentColorTheme.colorMap[grid[row, column].type]
-                    it.draw(blockTexture, 1.4f + column * GAME_SCALE, 1.8f + row * GAME_SCALE, GAME_SCALE, GAME_SCALE)
+                    it.draw(blockTexture, 1.5f + column * GAME_SCALE, 1.5f + row * GAME_SCALE, GAME_SCALE, GAME_SCALE)
                 }
             }
         }
 
         // render block preview
+        stage.viewport.apply(true)
         batch.projectionMatrix = stage.viewport.camera.combined
         batch.use {
             if (currentColorTheme == ColorTheme.Transparent) {
