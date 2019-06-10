@@ -5,10 +5,7 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.actions.Actions.*
 import com.badlogic.gdx.utils.Align
-import com.tetrolix.game.Buttons
-import com.tetrolix.game.Drawables
-import com.tetrolix.game.Labels
-import com.tetrolix.game.PREF_KEY_HIGHSCORE
+import com.tetrolix.game.*
 import ktx.actors.onClick
 import ktx.actors.plus
 import ktx.actors.plusAssign
@@ -23,9 +20,12 @@ class HighscoreScreen(context: Context) : KtxScreen {
     private val game = context.inject<KtxGame<KtxScreen>>()
     private val stage = context.inject<Stage>()
     private val prefs = context.inject<Preferences>()
+    private val audioMgr = context.inject<AudioManager>()
     var highscore = 0
 
     override fun show() {
+        audioMgr.play(MusicAssets.Highscore)
+
         val highestScore = prefs.getInteger(PREF_KEY_HIGHSCORE, 0)
         val newHighscore = highscore > highestScore
         if (newHighscore) {

@@ -24,6 +24,7 @@ private const val ROWS_FOR_NEXT_LEVEL = 10
 private const val MAX_LOCK_TIMER = 0.75f
 private const val GAME_SCALE = 0.70f
 private const val PREVIEW_BLOCK_SIZE = 24f
+private const val GAME_OVER_TIME = 2f
 
 class GameScreen(context: Context) : KtxScreen {
     private val game = context.inject<KtxGame<KtxScreen>>()
@@ -46,6 +47,7 @@ class GameScreen(context: Context) : KtxScreen {
     private var tickThreshold = 1f // 1 = once per second; 0.5 = twice per second; 0.1 = ten times per second
     private var highscore = 0
     private var lockTimer = 0f
+    private var gameOver = false
 
     private val highscoreLabel = Label("Highscore: $highscore", Scene2DSkin.defaultSkin, Labels.BrightBgd())
     private val levelLabel = Label("Current Level: $currentLevel", Scene2DSkin.defaultSkin, Labels.BrightBgd())
@@ -70,6 +72,7 @@ class GameScreen(context: Context) : KtxScreen {
         accumulator = 0f
         updateHighscore(0)
         lockTimer = 0f
+        gameOver = false
 
         // spawn first block
         currentBlock.spawn(grid)
@@ -169,6 +172,16 @@ class GameScreen(context: Context) : KtxScreen {
     }
 
     override fun render(delta: Float) {
+        if (grid.update(currentBlock, delta)) {
+            // grid is still being updated (e.g. flashing full rows) -> do nothing
+            draw(delta)
+            return
+        } else if (gameOver) {
+            game.getScreen<HighscoreScreen>().highscore = highscore
+            game.setScreen<HighscoreScreen>()
+            return
+        }
+
         // desktop input
         when {
             Gdx.input.isKeyJustPressed(Input.Keys.LEFT) -> moveLeft()
@@ -269,6 +282,7 @@ class GameScreen(context: Context) : KtxScreen {
     }
 
     private fun lockBlock() {
+        numResets = 0
         // check for cleared rows
         val numClearedRows = grid.removeFullRows(currentBlock)
         if (numClearedRows > 0) {
@@ -281,17 +295,18 @@ class GameScreen(context: Context) : KtxScreen {
                 setLevel(currentLevel + 1)
                 audioMgr.play(SoundAssets.NextLevel)
             }
+            // block will be spawned when row flashing in "Grid" class is done
         } else {
             // no rows cleared
             audioMgr.play(SoundAssets.BlockLock)
-        }
-
-        numResets = 0
-        if (!currentBlock.spawn(grid)) {
-            // grid is full and block cannot be spawned -> game over
-            audioMgr.play(SoundAssets.GameOver)
-            game.getScreen<HighscoreScreen>().highscore = highscore
-            game.setScreen<HighscoreScreen>()
+            // spawn next block
+            if (!currentBlock.spawn(grid)) {
+                // grid is full and block cannot be spawned -> game over
+                audioMgr.play(SoundAssets.GameOver)
+                gameOver = true
+                // screen switch is done when "Grid" class is done randomly filling in blocks
+                grid.fillRandom(GAME_OVER_TIME)
+            }
         }
     }
 }

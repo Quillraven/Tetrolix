@@ -217,6 +217,8 @@ enum class BlockType(internal val patterns: Array<Array<IntArray>>) {
         }
     }
 
+    fun next(): BlockType = if (ordinal + 1 < values().size) values()[ordinal + 1] else I
+
     companion object {
         fun random(): BlockType {
             val result = values().random()

@@ -24,7 +24,6 @@ import ktx.style.*
 const val UI_BTN_SIZE = 75f
 const val PREF_KEY_HIGHSCORE = "highscore"
 
-// TODO create UI (flash rows that get removed, randomly fill grid when lost)
 class Tetrolix : KtxGame<KtxScreen>() {
     private val context = Context()
 
