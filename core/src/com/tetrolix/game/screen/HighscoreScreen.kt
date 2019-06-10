@@ -10,6 +10,10 @@ class HighscoreScreen(context: Context) : KtxScreen {
     private val game = context.inject<KtxGame<KtxScreen>>()
     private val stage = context.inject<Stage>()
 
+    override fun show() {
+        stage.clear()
+    }
+
     override fun resize(width: Int, height: Int) {
         stage.viewport.update(width, height)
     }
