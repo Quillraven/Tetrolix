@@ -56,7 +56,6 @@ class Grid(width: Int, height: Int) {
         if (fillTime > 0) {
             fillTime -= delta
             filledBlocks += blocksToFill * delta
-            println("$fillTime - $filledBlocks")
             var toFill = filledBlocks
             for (row in 0 until rows()) {
                 for (col in 0 until columns()) {
