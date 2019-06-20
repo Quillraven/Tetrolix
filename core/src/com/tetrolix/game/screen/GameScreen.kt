@@ -4,7 +4,10 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.Batch
+import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.ui.Button
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.tetrolix.game.*
@@ -17,7 +20,10 @@ import ktx.app.KtxGame
 import ktx.app.KtxScreen
 import ktx.graphics.use
 import ktx.inject.Context
-import ktx.scene2d.*
+import ktx.scene2d.Scene2DSkin
+import ktx.scene2d.actor
+import ktx.scene2d.label
+import ktx.scene2d.table
 
 private const val MAX_RESETS = 20
 private const val ROWS_FOR_NEXT_LEVEL = 10
@@ -51,6 +57,21 @@ class GameScreen(context: Context) : KtxScreen {
 
     private val highscoreLabel = Label("Highscore: $highscore", Scene2DSkin.defaultSkin, Labels.BrightBgd())
     private val levelLabel = Label("Current Level: $currentLevel", Scene2DSkin.defaultSkin, Labels.BrightBgd())
+    private val btnRotateRight = ImageButton(Scene2DSkin.defaultSkin, Buttons.RotateRight())
+    private val btnRotateLeft = ImageButton(Scene2DSkin.defaultSkin, Buttons.RotateLeft())
+    private val btnMoveLeft = ImageButton(Scene2DSkin.defaultSkin, Buttons.Arrow()).apply {
+        isTransform = true
+        setOrigin(UI_BTN_SIZE * 0.5f, UI_BTN_SIZE * 0.5f)
+        rotateBy(180f)
+    }
+    private val btnMoveRight = ImageButton(Scene2DSkin.defaultSkin, Buttons.Arrow())
+    private val btnMoveDown = ImageButton(Scene2DSkin.defaultSkin, Buttons.Arrow()).apply {
+        isTransform = true
+        setOrigin(UI_BTN_SIZE * 0.5f, UI_BTN_SIZE * 0.5f)
+        rotateBy(270f)
+    }
+    private val touchDownEvent = InputEvent().apply { type = InputEvent.Type.touchDown }
+    private val touchUpEvent = InputEvent().apply { type = InputEvent.Type.touchUp }
 
     override fun show() {
         // set music
@@ -88,26 +109,13 @@ class GameScreen(context: Context) : KtxScreen {
             label("Next block: ", Labels.BrightBgd()) { cell -> cell.expand().width(300f).top().left().padLeft(10f).padTop(5f).colspan(2).row() }
 
             // rotate block buttons
-            imageButton(Buttons.RotateLeft()) { cell -> cell.size(UI_BTN_SIZE).left().bottom().expand().padLeft(10f).padBottom(10f) }.onClick { rotate(false) }
-            imageButton(Buttons.RotateRight()) { cell -> cell.size(UI_BTN_SIZE).right().bottom().expand().colspan(2).padRight(10f).padBottom(10f).row() }.onClick { rotate(true) }
+            actor(btnRotateLeft) { cell -> cell.size(UI_BTN_SIZE).left().bottom().expand().padLeft(10f).padBottom(10f) }.onClick { rotate(false) }
+            actor(btnRotateRight) { cell -> cell.size(UI_BTN_SIZE).right().bottom().expand().colspan(2).padRight(10f).padBottom(10f).row() }.onClick { rotate(true) }
 
-            // move block left button
-            imageButton(Buttons.Arrow()) { cell -> cell.size(UI_BTN_SIZE).left().bottom().padLeft(10f).padBottom(80f) }.run {
-                isTransform = true
-                setOrigin(UI_BTN_SIZE * 0.5f, UI_BTN_SIZE * 0.5f)
-                rotateBy(180f)
-                onClick { moveLeft() }
-            }
-            // move block right button
-            imageButton(Buttons.Arrow()) { cell -> cell.size(UI_BTN_SIZE).right().bottom().padRight(10f).padBottom(80f).row() }.onClick { moveRight() }
-
-            // drop block button
-            imageButton(Buttons.Arrow()) { cell -> cell.size(UI_BTN_SIZE).expandX().right().bottom().padRight(10f).padBottom(10f).colspan(2) }.run {
-                isTransform = true
-                setOrigin(UI_BTN_SIZE * 0.5f, UI_BTN_SIZE * 0.5f)
-                rotateBy(270f)
-                onClick { moveBottom() }
-            }
+            // move block buttons
+            actor(btnMoveLeft) { cell -> cell.size(UI_BTN_SIZE).left().bottom().padLeft(10f).padBottom(80f) }.onClick { moveLeft() }
+            actor(btnMoveRight) { cell -> cell.size(UI_BTN_SIZE).right().bottom().padRight(10f).padBottom(80f).row() }.onClick { moveRight() }
+            actor(btnMoveDown) { cell -> cell.size(UI_BTN_SIZE).expandX().right().bottom().padRight(10f).padBottom(10f).colspan(2) }.onClick { moveBottom() }
 
             background = skin.getDrawable(Drawables.GutterDark())
             setFillParent(true)
@@ -171,6 +179,13 @@ class GameScreen(context: Context) : KtxScreen {
         resetAccumulator()
     }
 
+    private fun simulateButtonPress(button: Button) {
+        button.run {
+            fire(touchDownEvent)
+            fire(touchUpEvent)
+        }
+    }
+
     override fun render(delta: Float) {
         if (grid.update(currentBlock, delta)) {
             // grid is still being updated (e.g. flashing full rows) -> do nothing
@@ -184,11 +199,11 @@ class GameScreen(context: Context) : KtxScreen {
 
         // desktop input
         when {
-            Gdx.input.isKeyJustPressed(Input.Keys.LEFT) -> moveLeft()
-            Gdx.input.isKeyJustPressed(Input.Keys.RIGHT) -> moveRight()
-            Gdx.input.isKeyJustPressed(Input.Keys.DOWN) -> moveBottom()
-            Gdx.input.isKeyJustPressed(Input.Keys.R) -> rotate(true)
-            Gdx.input.isKeyJustPressed(Input.Keys.L) -> rotate(false)
+            Gdx.input.isKeyJustPressed(Input.Keys.LEFT) -> simulateButtonPress(btnMoveLeft)
+            Gdx.input.isKeyJustPressed(Input.Keys.RIGHT) -> simulateButtonPress(btnMoveRight)
+            Gdx.input.isKeyJustPressed(Input.Keys.DOWN) -> simulateButtonPress(btnMoveDown)
+            Gdx.input.isKeyJustPressed(Input.Keys.R) -> simulateButtonPress(btnRotateRight)
+            Gdx.input.isKeyJustPressed(Input.Keys.L) -> simulateButtonPress(btnRotateLeft)
         }
         // game logic
         updateLogic(delta)
