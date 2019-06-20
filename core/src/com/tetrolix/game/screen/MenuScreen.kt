@@ -14,6 +14,7 @@ import ktx.app.KtxGame
 import ktx.app.KtxScreen
 import ktx.inject.Context
 import ktx.scene2d.*
+import kotlin.math.roundToInt
 
 class MenuScreen(context: Context) : KtxScreen {
     private val game = context.inject<KtxGame<KtxScreen>>()
@@ -21,7 +22,7 @@ class MenuScreen(context: Context) : KtxScreen {
     private val audioMgr = context.inject<AudioManager>()
     private val prefs = context.inject<Preferences>()
 
-    private val volumeInfo = Label("${Math.round(audioMgr.volume * 100)}", Scene2DSkin.defaultSkin, Labels.BrightBgd()).apply { setAlignment(Align.center) }
+    private val volumeInfo = Label("${(audioMgr.volume * 100).roundToInt()}", Scene2DSkin.defaultSkin, Labels.BrightBgd()).apply { setAlignment(Align.center) }
     private val btnVolDec = TextButton("-", Scene2DSkin.defaultSkin)
     private val btnVolInc = TextButton("+", Scene2DSkin.defaultSkin)
     // window that is shown when clicking on "Credits" button
@@ -43,7 +44,7 @@ class MenuScreen(context: Context) : KtxScreen {
     }
     // window that is shown when clicking on "Information" button
     private val informationWindow = window("") {
-        label("Information", Labels.Huge()) { cell -> cell.colspan(3).padTop(20f).row() }.color = Color.BLACK
+        label("Information", Labels.Huge()) { cell -> cell.colspan(3).padTop(20f).padBottom(15f).row() }.color = Color.BLACK
         // move block info
         imageButton(Buttons.Arrow()) { cell -> cell.size(UI_BTN_SIZE).padLeft(10f) }
         imageButton(Buttons.Arrow()) { cell -> cell.size(UI_BTN_SIZE) }.run {
@@ -51,7 +52,7 @@ class MenuScreen(context: Context) : KtxScreen {
             setOrigin(UI_BTN_SIZE * 0.5f, UI_BTN_SIZE * 0.5f)
             rotateBy(180f)
         }
-        label("moves block right and left", Labels.Dark()) { cell -> cell.expand().fill().padLeft(10f).padRight(10f).row() }.run {
+        label("moves block right and left (Keyboard: Left and Right arrow key)", Labels.Dark()) { cell -> cell.expand().fill().padLeft(10f).padRight(10f).row() }.run {
             setAlignment(Align.left)
             setWrap(true)
         }
@@ -61,14 +62,14 @@ class MenuScreen(context: Context) : KtxScreen {
             setOrigin(UI_BTN_SIZE * 0.5f, UI_BTN_SIZE * 0.5f)
             rotateBy(270f)
         }
-        label("drops block to lowest possible position", Labels.Dark()) { cell -> cell.expand().fill().padLeft(10f).colspan(2).row() }.run {
+        label("drops block to lowest possible position (Keyboard: Down arrow key)", Labels.Dark()) { cell -> cell.expand().fill().padLeft(10f).colspan(2).row() }.run {
             setAlignment(Align.left)
             setWrap(true)
         }
         // rotate block info
         imageButton(Buttons.RotateRight()) { cell -> cell.size(UI_BTN_SIZE).padLeft(10f) }
         imageButton(Buttons.RotateLeft()) { cell -> cell.size(UI_BTN_SIZE) }
-        label("rotates block clockwise and counter clockwise", Labels.Dark()) { cell -> cell.expand().fill().padLeft(10f).row() }.run {
+        label("rotates block clockwise and counter clockwise (Keyboard: R and L key)", Labels.Dark()) { cell -> cell.expand().fill().padLeft(10f).row() }.run {
             setAlignment(Align.left)
             setWrap(true)
         }
@@ -89,7 +90,7 @@ class MenuScreen(context: Context) : KtxScreen {
     private fun updateVolume(newValue: Float) {
         audioMgr.volume = newValue
         audioMgr.play(SoundAssets.ButtonSelect)
-        volumeInfo.txt = "${Math.round(audioMgr.volume * 100)}"
+        volumeInfo.txt = "${(audioMgr.volume * 100).roundToInt()}"
     }
 
     override fun show() {
