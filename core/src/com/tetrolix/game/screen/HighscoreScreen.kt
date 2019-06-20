@@ -29,6 +29,7 @@ class HighscoreScreen(context: Context) : KtxScreen {
         val highestScore = prefs.getInteger(PREF_KEY_HIGHSCORE, 0)
         val newHighscore = highscore > highestScore
         if (newHighscore) {
+            audioMgr.play(SoundAssets.Highscore)
             prefs.putInteger(PREF_KEY_HIGHSCORE, highscore)
             prefs.flush()
         }
