@@ -13,6 +13,13 @@ Banner
   index: -1
 Block
   rotate: false
+  xy: 617, 619
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+BlockGhost
+  rotate: false
   xy: 514, 516
   size: 32, 32
   orig: 32, 32
