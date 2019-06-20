@@ -40,7 +40,7 @@ enum class Drawables {
     BtnArrow, BtnArrowPressed,
     BtnRotateLeft, BtnRotateLeftPressed,
     BtnRotateRight, BtnRotateRightPressed,
-    BtnDark, Gutter, GutterDark, Banner, Block;
+    BtnDark, Gutter, GutterDark, Banner, Block, BlockGhost;
 
     operator fun invoke() = toString()
 }
