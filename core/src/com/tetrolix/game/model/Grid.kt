@@ -2,7 +2,7 @@ package com.tetrolix.game.model
 
 import com.badlogic.gdx.utils.IntArray
 
-private const val FLASH_ROW_TIME = 1.25f
+private const val FLASH_ROW_TIME = 1.00f
 private const val COLOR_CHANGE_INTERVAL = 0.1f
 
 class Cell(internal var type: BlockType = BlockType.Empty)
