@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.Batch
+import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Button
@@ -40,6 +41,8 @@ class GameScreen(context: Context) : KtxScreen {
     private val stage = context.inject<Stage>()
 
     private val blockTexture = Scene2DSkin.defaultSkin.atlas.findRegion(Drawables.Block())
+    private val ghostBlockTexture = Scene2DSkin.defaultSkin.atlas.findRegion(Drawables.BlockGhost())
+    private var gridIsUpdating = false
 
     private val grid = Grid(10, 20)
     private var currentBlock = Block()
@@ -94,6 +97,7 @@ class GameScreen(context: Context) : KtxScreen {
         updateHighscore(0)
         lockTimer = 0f
         gameOver = false
+        gridIsUpdating = false
 
         // spawn first block
         currentBlock.spawn(grid)
@@ -189,6 +193,7 @@ class GameScreen(context: Context) : KtxScreen {
     override fun render(delta: Float) {
         if (grid.update(currentBlock, delta)) {
             // grid is still being updated (e.g. flashing full rows) -> do nothing
+            gridIsUpdating = true
             draw(delta)
             return
         } else if (gameOver) {
@@ -196,6 +201,7 @@ class GameScreen(context: Context) : KtxScreen {
             game.setScreen<HighscoreScreen>()
             return
         }
+        gridIsUpdating = false
 
         // desktop input
         when {
@@ -249,12 +255,28 @@ class GameScreen(context: Context) : KtxScreen {
         viewport.apply(true)
         batch.projectionMatrix = viewport.camera.combined
         batch.use {
+            if (!gridIsUpdating) {
+                grid.removeBlock(currentBlock)
+            }
             // draw grid
             for (row in 0 until grid.rows()) {
                 for (column in 0 until grid.columns()) {
                     batch.color = currentColorTheme.colorMap[grid[row, column].type]
                     it.draw(blockTexture, 1.5f + column * GAME_SCALE, 1.5f + row * GAME_SCALE, GAME_SCALE, GAME_SCALE)
                 }
+            }
+
+            if (!gridIsUpdating) {
+                // draw ghost block
+                grid.addBlock(currentBlock)
+                currentBlock.storePosition()
+                currentBlock.moveToBottom(grid)
+                batch.color = currentColorTheme.colorMap[currentBlock.type()]
+                drawCurrentBlock(it, ghostBlockTexture)
+
+                // draw block
+                currentBlock.restorePosition(grid)
+                drawCurrentBlock(it, blockTexture)
             }
         }
 
@@ -279,6 +301,17 @@ class GameScreen(context: Context) : KtxScreen {
 
         // reset batch color
         batch.color = Color.WHITE
+    }
+
+    private fun drawCurrentBlock(batch: Batch, texture: TextureAtlas.AtlasRegion) {
+        for (row in 0 until currentBlock.rows()) {
+            for (column in 0 until currentBlock.columns()) {
+                val rowIdx = currentBlock.getRowIdx(row)
+                // ignore cells of the block that are not used
+                if (currentBlock[row, column] == 0 || rowIdx >= grid.rows()) continue
+                batch.draw(texture, 1.5f + currentBlock.getColumnIdx(column) * GAME_SCALE, 1.5f + rowIdx * GAME_SCALE, GAME_SCALE, GAME_SCALE)
+            }
+        }
     }
 
     private fun getPointsForClear(numClearedRows: Int): Int {

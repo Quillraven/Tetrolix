@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException
 class Block {
     private var x = 0
     private var y = 0
+    private var origY = 0
     private var type = BlockType.Empty
     private var currentPatternIdx = 0
     private var next = BlockType.random()
@@ -16,6 +17,16 @@ class Block {
     fun type() = type
 
     fun next() = next
+
+    fun storePosition() {
+        origY = y
+    }
+
+    fun restorePosition(grid: Grid) {
+        grid.removeBlock(this)
+        y = origY
+        grid.addBlock(this)
+    }
 
     /**
      * Returns the bounding box amount of rows for the block. E.g. block I has a bounding box of size 4x4
