@@ -1,6 +1,6 @@
 android {
     buildToolsVersion "28.0.3"
-    compileSdkVersion 28
+    compileSdkVersion 29
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
@@ -18,10 +18,10 @@ android {
     }
     defaultConfig {
         applicationId "com.tetrolix.game"
-        minSdkVersion 9
-        targetSdkVersion 28
-        versionCode 3
-        versionName "1.1-beta"
+        minSdkVersion 14
+        targetSdkVersion 29
+        versionCode 4
+        versionName "1.2-beta"
     }
     buildTypes {
         release {
@@ -87,27 +87,4 @@ task run(type: Exec) {
 
     def adb = path + "/platform-tools/adb"
     commandLine "$adb", 'shell', 'am', 'start', '-n', 'com.tetrolix.game/com.tetrolix.game.AndroidLauncher'
-}
-
-// sets up the Android Idea project, using the old Ant based build.
-idea {
-    module {
-        sourceDirs += file("src");
-        scopes = [ COMPILE: [plus:[project.configurations.compile]]]        
-
-        iml {
-            withXml {
-                def node = it.asNode()
-                def builder = NodeBuilder.newInstance();
-                builder.current = node;
-                builder.component(name: "FacetManager") {
-                    facet(type: "android", name: "Android") {
-                        configuration {
-                            option(name: "UPDATE_PROPERTY_FILES", value:"true")
-                        }
-                    }
-                }
-            }
-        }
-    }
 }
