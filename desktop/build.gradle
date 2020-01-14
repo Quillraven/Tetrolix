@@ -37,6 +37,7 @@ task dist(type: Jar) {
     manifest {
         attributes 'Main-Class': project.mainClassName
     }
+    archivesBaseName = 'Tetrolix'
 }
 
 dist.dependsOn classes
